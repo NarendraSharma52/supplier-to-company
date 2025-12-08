@@ -56,7 +56,7 @@ public class SupplierService {
         SupplierUser supplierUser = new SupplierUser();
         supplierUser.setFirstName(supplier.getName());
         supplierUser.setLastName("Admin");
-      //  supplierUser.setPassword(supplierRegistrationDto.getPassword());
+        supplierUser.setPassword(supplierRegistrationDto.getPassword());
         supplierUser.setSupplier(supplier);
         supplierUser.setEmail(supplier.getContactEmail());
         supplierUser.setPhoneNumber(supplier.getContactPhone());

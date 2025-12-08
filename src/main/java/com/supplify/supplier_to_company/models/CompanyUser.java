@@ -18,7 +18,6 @@ public class CompanyUser extends User {
     @ManyToOne
     Company company;
     String fullName;
-    @ManyToMany
-    List<Role> roles;
+
 
 }

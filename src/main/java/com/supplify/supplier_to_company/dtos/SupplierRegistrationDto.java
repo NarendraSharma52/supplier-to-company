@@ -17,6 +17,7 @@ public class SupplierRegistrationDto {
     String contactPersonName;
     String contactEmail;
     String contactPhone;
+    String password;
     String country;
     String industryCategory;
     String businessType;

@@ -19,7 +19,6 @@ public class SupplierUser extends User{
     Supplier supplier;
     String firstName;
     String lastName;
-    @ManyToMany
-    List<Role> roles;
+
 }
 
