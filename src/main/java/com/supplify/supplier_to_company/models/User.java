@@ -23,6 +23,7 @@ public class User {
     String phoneNumber;
     String status;
     String password;
+    String userType;
     @ManyToMany
     List<Role> roles;
     LocalDateTime createdAt;

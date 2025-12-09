@@ -61,7 +61,7 @@ public class SupplierService {
         supplierUser.setEmail(supplier.getContactEmail());
         supplierUser.setPhoneNumber(supplier.getContactPhone());
         supplierUser.setStatus("ACTIVE");
-     //   supplierUser.setUserType("SUPPLIER_USER");
+       supplierUser.setUserType("SUPPLIER_USER");
 
         supplierUser.setRoles(List.of(adminRole));
         supplierUser.setCreatedAt(LocalDateTime.now());
