@@ -2,6 +2,7 @@ package com.supplify.supplier_to_company.services;
 
 
 import com.supplify.supplier_to_company.dtos.AuthResponseDto;
+import com.supplify.supplier_to_company.dtos.CreateRoleDto;
 import com.supplify.supplier_to_company.dtos.UserLoginDto;
 import com.supplify.supplier_to_company.exceptions.InvalidCredentialsException;
 import com.supplify.supplier_to_company.exceptions.UnAuthorizedException;
@@ -34,6 +35,13 @@ public class AuthService {
     @Autowired
     SupplierService supplierService;
 
+
+    @Autowired
+    OperationService operationService;
+
+    @Autowired
+    SupplierUserService supplierUserService;
+
     public AuthResponseDto authenticateUser(UserLoginDto userLoginDto){
         String email = userLoginDto.getEmail();
         // We need to check that this email exists in our user table or not.
@@ -54,6 +62,11 @@ public class AuthService {
         List<String> roleNames = roleService.mapRoleToRoleNames(user.getRoles());
         String token = jwtUtil.generateJwtToken(user.getEmail(), roleNames);
         authResponseDto.setToken(token);
+        if(user.getUserType().equals("SUPPLIER_USER")){
+            Supplier supplier=supplierUserService.getSuplierByUser((user));
+            authResponseDto.setOrgName((supplier.getName()));
+            authResponseDto.setOrgImageLink(supplierService.getCompanyLogoBySupplier(supplier));
+        }
         return authResponseDto;
     }
     public List<Role> getAllOrgRolesByUserSession(String token){
@@ -91,6 +104,43 @@ public class AuthService {
         }
         return false;
     }
+
+    public List<Operation> getAllOperationsByUserSession(String token){
+        Claims claims = jwtUtil.decryptToken(token);
+        String email = claims.get("email", String.class);
+        List<String> roles = claims.get("roles", List.class);
+        boolean isAccess = this.isAccessAvailable(roles, "see_all_available_roles");
+        if(!isAccess){
+            throw new UnAuthorizedException(String.format("User is not having access to check all org operations"));
+        }
+        User user = userService.findByEmail(email);
+        if(user.getUserType().equals("SUPPLIER_USER")){
+
+            return operationService.getAllSupplierRelatedOperations();
+        }
+        return new ArrayList<>();
+
+    }
+
+    public  boolean isAccessAvailableByToken(String token, String operationName){
+        Claims claims = jwtUtil.decryptToken(token);
+        String email = claims.get("email", String.class);
+        List<String> roles = claims.get("roles", List.class);
+        return this.isAccessAvailable(roles, operationName);
+
+    }
+
+
+
+    public Role createRole(CreateRoleDto createRoleDto, String token){
+        boolean isAccess=this.isAccessAvailableByToken(token,"create_role");
+        if(!isAccess){
+            throw new UnAuthorizedException(String.format("User is not having access to create role"));
+        }
+        return roleService.createRoleByDto(createRoleDto);
+
+    }
+
 
 
 

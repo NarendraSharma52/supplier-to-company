@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -49,6 +50,13 @@ public class DocumentService {
             throw new RuntimeException("Unexpected error uploading " + fileType + " document", e);
         }
     }
+
+    public  String getSupplierCompanyLogo(UUID supplierId){
+        SupplierDocument supplierDocument=supplierDocumentRepository.getSupplierCompanyLogo((supplierId));
+        return supplierDocument.getFileUrl();
+
+    }
+
 
 
 }

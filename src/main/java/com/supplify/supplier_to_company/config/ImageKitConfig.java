@@ -1,28 +1,34 @@
 package com.supplify.supplier_to_company.config;
 
 import io.imagekit.sdk.ImageKit;
-import io.imagekit.sdk.config.Configuration;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
+@Configuration
 public class ImageKitConfig {
+
     @Value("${image.kit.public.key}")
-    String publicKey;
+    private String publicKey;
+
     @Value("${image.kit.private.key}")
-    String privateKey;
+    private String privateKey;
+
     @Value("${image.kit.url}")
-    String url;
+    private String url;
 
     @Bean
-    public ImageKit imageKit(){
+    public ImageKit imageKit() {
         ImageKit imageKit = ImageKit.getInstance();
-        Configuration configuration = new Configuration(
-                publicKey,
-                privateKey,
-                url
-        );
-        imageKit.setConfig(configuration);
+
+        io.imagekit.sdk.config.Configuration imageKitConfig =
+                new io.imagekit.sdk.config.Configuration(
+                        publicKey,
+                        privateKey,
+                        url
+                );
+
+        imageKit.setConfig(imageKitConfig);
         return imageKit;
     }
-
 }

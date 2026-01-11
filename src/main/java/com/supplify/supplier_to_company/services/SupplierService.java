@@ -122,4 +122,8 @@ public class SupplierService {
     public Supplier saveSupplier(Supplier supplier){
         return supplierRepository.save(supplier);
     }
+
+    public  String getCompanyLogoBySupplier(Supplier supplier){
+        return  documentService.getSupplierCompanyLogo((supplier.getId()));
+    }
 }

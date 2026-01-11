@@ -3,6 +3,7 @@ package com.supplify.supplier_to_company.services;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,7 +33,8 @@ public class OperationService {
             "invoice_update",
             "invoice_submit_for_approval",
             "invite_employee",
-            "see_all_available_roles"
+            "see_all_available_roles",
+            "create_role"
     );
 
     public List<Operation> getAllSupplierRelatedOperations(){
@@ -44,4 +46,17 @@ public class OperationService {
         }
         return operations;
     }
+
+    public  List<Operation> getAllOperationObjectByIds(List<UUID> ids){
+        List<Operation> operations=new ArrayList<>();
+        for(UUID id: ids){
+            Operation operation=operationRepository.findById(id).orElse(null);
+            if(operation==null){
+                // throw Exception
+            }
+            operations.add(operation);
+        }
+        return  operations;
+    }
+
 }

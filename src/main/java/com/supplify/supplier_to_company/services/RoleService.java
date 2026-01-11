@@ -4,9 +4,11 @@ package com.supplify.supplier_to_company.services;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 //import com.supplify.supplier_to_company.security.JwtUtil;
 // import io.jsonwebtoken.Claims;
+import com.supplify.supplier_to_company.dtos.CreateRoleDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -58,6 +60,20 @@ public class RoleService {
     public Role findByName(String roleName){
         return roleRepository.findByName(roleName);
     }
+
+    public Role createRoleByDto(CreateRoleDto createRoleDto){
+        Role role=new Role();
+        role.setName(createRoleDto.getOrgName() + " "+ createRoleDto.getRoleName());
+        role.setDescription(createRoleDto.getRoleDescription());
+        List<UUID> operationIds=createRoleDto.getOperationIds();
+        role.setOperations(operationService.getAllOperationObjectByIds(operationIds));
+        role.setCreatedAt(LocalDateTime.now());
+        role.setUpdatedAt(LocalDateTime.now());
+        return roleRepository.save(role);
+
+    }
+
+
 
 
 }
