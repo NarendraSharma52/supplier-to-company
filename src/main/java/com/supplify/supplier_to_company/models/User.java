@@ -24,6 +24,7 @@ public class User {
     String status;
     String password;
     String userType;
+    boolean isPasswordReset;
     @ManyToMany
     List<Role> roles;
     LocalDateTime createdAt;

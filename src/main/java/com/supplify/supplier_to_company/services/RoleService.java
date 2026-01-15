@@ -9,6 +9,7 @@ import java.util.UUID;
 //import com.supplify.supplier_to_company.security.JwtUtil;
 // import io.jsonwebtoken.Claims;
 import com.supplify.supplier_to_company.dtos.CreateRoleDto;
+import com.supplify.supplier_to_company.exceptions.InvalidRoleException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -72,6 +73,19 @@ public class RoleService {
         return roleRepository.save(role);
 
     }
+
+    public List<Role> getRolesByIds(List<UUID> roleIds){
+        List<Role> roles=new ArrayList<>();
+        for(UUID id:roleIds){
+            Role role=roleRepository.findById(id).orElse(null);
+            if(role==null){
+                throw new InvalidRoleException(String.format("User write wrong id "));
+            }
+            roles.add(role);
+        }
+        return roles;
+    }
+
 
 
 

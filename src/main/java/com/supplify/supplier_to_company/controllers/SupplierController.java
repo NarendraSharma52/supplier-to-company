@@ -2,8 +2,11 @@ package com.supplify.supplier_to_company.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.supplify.supplier_to_company.dtos.InviteSupplierEmployeeDto;
 import com.supplify.supplier_to_company.dtos.SupplierRegistrationDto;
+import com.supplify.supplier_to_company.exceptions.UnAuthorizedException;
 import com.supplify.supplier_to_company.models.Supplier;
+import com.supplify.supplier_to_company.services.AuthService;
 import com.supplify.supplier_to_company.services.SupplierService;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +26,9 @@ public class SupplierController {
 
     @Autowired
     private SupplierService supplierService;
+
+    @Autowired
+    private AuthService authService;
 
     @PostMapping("/start-registration")
     public ResponseEntity startRegistration(
@@ -66,6 +72,23 @@ public class SupplierController {
             errorResponse.put("message", e.getMessage());
             return ResponseEntity.internalServerError().body(errorResponse);
         }
+
+    }
+
+    @PostMapping("/employee/invite")
+    public ResponseEntity inviteSupplierEmployee(
+            @RequestBody InviteSupplierEmployeeDto inviteSupplierEmployeeDto,
+            @RequestHeader String Authorization
+            ){
+      try {
+          boolean isAccessAvaible= authService.isAccessAvailableByToken(Authorization,"invite-employee");
+          if(!isAccessAvaible){
+              throw  new UnAuthorizedException("User is not having access to invite employee");
+          }
+
+
+      }
+
 
     }
 }

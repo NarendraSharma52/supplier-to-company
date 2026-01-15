@@ -141,6 +141,12 @@ public class AuthService {
 
     }
 
+    public User getUserByToken(String token){
+        Claims claims = jwtUtil.decryptToken(token);
+        String email = claims.get("email", String.class);
+        return userService.findByEmail(email);
+    }
+
 
 
 

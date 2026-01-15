@@ -1,10 +1,12 @@
 package com.supplify.supplier_to_company.services;
 
+import com.supplify.supplier_to_company.dtos.InviteSupplierEmployeeDto;
 import com.supplify.supplier_to_company.dtos.SupplierRegistrationDto;
 import com.supplify.supplier_to_company.exceptions.UploadFileException;
 import com.supplify.supplier_to_company.models.*;
 import com.supplify.supplier_to_company.repositories.SupplierRepository;
 import com.supplify.supplier_to_company.utilities.MappingUtilities;
+import com.supplify.supplier_to_company.utilities.PasswordGenratorUtility;
 import io.imagekit.sdk.models.results.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,6 +37,9 @@ public class SupplierService {
 
     @Autowired
     SupplierRepository supplierRepository;
+
+    @Autowired
+    PasswordGenratorUtility passwordGenratorUtility;
 
     public Supplier registerSupplier(
             MultipartFile gstCertificate,
@@ -126,4 +131,30 @@ public class SupplierService {
     public  String getCompanyLogoBySupplier(Supplier supplier){
         return  documentService.getSupplierCompanyLogo((supplier.getId()));
     }
+
+    public  Supplier getSupplierByUser(User user){
+        return supplierUserService.getSuplierByUser((user));
+    }
+
+    public void inviteSupplierEmployee(InviteSupplierEmployeeDto inviteSupplierEmployeeDto,
+                                       User inviterUser){
+        String password=passwordGenratorUtility.generatePassword(12);
+        SupplierUser supplierUser=new SupplierUser();
+        supplierUser.setUserType("SUPPLIER_USER");
+        supplierUser.setPassword(password);
+        supplierUser.setEmail(inviteSupplierEmployeeDto.getEmail());
+        supplierUser.setFirstName(inviteSupplierEmployeeDto.getFirstName());
+        supplierUser.setLastName(inviteSupplierEmployeeDto.getLastName());
+        supplierUser.setPasswordReset(true);
+        List<UUID> roleId=inviteSupplierEmployeeDto.getRoleIds();
+        List<Role> roles=roleService.getRolesByIds(roleId);
+        supplierUser.setRoles(roles);
+        Supplier supplier=this.getSupplierByUser(inviterUser);
+        supplierUser.setSupplier(supplier);
+        supplierUser.setStatus("INVITED");
+        supplierUser.setCreatedAt(LocalDateTime.now());
+        supplierUser.setUpdatedAt(LocalDateTime.now());
+        supplierUser=supplierUserService.save(supplierUser);
+    }
+
 }
