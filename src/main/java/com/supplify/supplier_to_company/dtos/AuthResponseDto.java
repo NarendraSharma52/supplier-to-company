@@ -14,6 +14,7 @@ import java.util.UUID;
 public class AuthResponseDto {
     private String token;
     private UUID userId;
+    private  String refreshtoken;
     String orgName;
     String orgImageLink;
     private List<Role> roles;

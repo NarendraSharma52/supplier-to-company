@@ -1,7 +1,10 @@
 package com.supplify.supplier_to_company.utilities;
 
+import org.springframework.stereotype.Component;
+
 import java.security.SecureRandom;
 
+@Component
 public class PasswordGenratorUtility {
 
     private static final String UPPER = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";

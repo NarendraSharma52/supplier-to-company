@@ -27,15 +27,10 @@ public class RoleService {
     RoleRepository roleRepository;
 
 
-    // IndianOil -> Will try to register as supplier into our application
-    // IndianOil -> We will be creating one admin user.
-    // Now we need to create one user for indian oil which will have admin role.
-    // IndianOil is a supplier -> and its admin role should have all the operations related to supplier
+
 
     public Role createAdminRoleForSupplier(String supplierCompanyName){
-        // 789
-        // 789-admin
-        // all the operations related to supplier
+
         Role role = new Role();
         role.setName(supplierCompanyName + "_admin");
         role.setDescription("Admin role for supplier " + supplierCompanyName);

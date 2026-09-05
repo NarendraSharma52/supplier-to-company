@@ -6,16 +6,22 @@ import com.supplify.supplier_to_company.dtos.InviteSupplierEmployeeDto;
 import com.supplify.supplier_to_company.dtos.SupplierRegistrationDto;
 import com.supplify.supplier_to_company.exceptions.UnAuthorizedException;
 import com.supplify.supplier_to_company.models.Supplier;
+import com.supplify.supplier_to_company.models.User;
 import com.supplify.supplier_to_company.services.AuthService;
 import com.supplify.supplier_to_company.services.SupplierService;
 import org.apache.coyote.Response;
+import org.apache.tomcat.util.http.parser.Authorization;
+import org.hibernate.query.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/s2c/api/v1/supplier")
@@ -30,11 +36,13 @@ public class SupplierController {
     @Autowired
     private AuthService authService;
 
+
+
     @PostMapping("/start-registration")
     public ResponseEntity startRegistration(
             @RequestPart(value = "gstCertificate") MultipartFile gstCertificate,
             @RequestPart(value = "panCard") MultipartFile panCard,
-            @RequestPart(value = "businessLicense") MultipartFile businessLicense,
+            @RequestPart(value = "businessLicense", required = false) MultipartFile businessLicense,
             @RequestPart(value = "isoCertificate") MultipartFile isoCertificate,
             @RequestPart(value = "msmeCertificate") MultipartFile msmeCertificate,
             @RequestPart(value = "insurancePapers") MultipartFile insurancePapers,
@@ -75,20 +83,87 @@ public class SupplierController {
 
     }
 
-    @PostMapping("/employee/invite")
-    public ResponseEntity inviteSupplierEmployee(
+    @PostMapping("/invite-employee")
+    public ResponseEntity<?> inviteEmployee(
             @RequestBody InviteSupplierEmployeeDto inviteSupplierEmployeeDto,
-            @RequestHeader String Authorization
-            ){
-      try {
-          boolean isAccessAvaible= authService.isAccessAvailableByToken(Authorization,"invite-employee");
-          if(!isAccessAvaible){
-              throw  new UnAuthorizedException("User is not having access to invite employee");
-          }
+            @RequestHeader("Authorization") String authorization) {
 
+        boolean isAccessAvailable =
+                authService.isAccessAvailableByToken(
+                        authorization,
+                        "invite-employee"
+                );
 
-      }
+        if (!isAccessAvailable) {
+            throw new UnAuthorizedException(
+                    "User is not authorized to invite an employee"
+            );
+        }
 
+        // Your invitation business logic
+        supplierService.inviteSupplierEmployee(inviteSupplierEmployeeDto, authorization);
 
+        return ResponseEntity.ok("Employee invitation sent successfully");
     }
+
+    @GetMapping("/get-employee")
+    public ResponseEntity getUsersLastSixMonths(@RequestParam int value,
+                                                @RequestParam String unit){
+        try{
+            return ResponseEntity.ok(supplierService.getUserByDate(value, unit));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+     @GetMapping("/get-supllier")
+    public ResponseEntity getSupplierBtwDDates(@RequestParam String startDate,
+                                               @RequestParam String endDate){
+        try{
+            LocalDateTime start=LocalDateTime.parse(startDate);
+            LocalDateTime end=LocalDateTime.parse(endDate);
+            return ResponseEntity.ok(supplierService.getUserByDate(start,end));
+
+        } catch (RuntimeException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    // @GetMapping("/pages")
+    // public Page<User> getUserByPage(@RequestParam int pages,
+      //                              @RequestParam int size){
+       // return supplierService.getPage((pages,size));
+    //}
+
+    @PatchMapping("/user/{id}")
+    public ResponseEntity updateUser(@PathVariable UUID id,
+                                     @RequestBody Map<String,Object> update){
+        return ResponseEntity.ok(supplierService.updateUser(id,update));
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public String deleteUser(UUID id){
+        return supplierService.deleteUser(id);
+    }
+
+    @DeleteMapping("/deletename/{id}")
+    public String deleteName(UUID id){
+        return  supplierService.deleteName(id);
+        return "User name succesfully";
+    }
+
+
+
+
+
+
+
+
+
 }
+
+
+
+
+
+

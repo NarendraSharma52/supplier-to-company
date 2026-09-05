@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>You're Invited to Join Our Organization</title>
+    <style>
+        body {
+          margin: 0;
+          padding: 0;
+          background-color: #f4f6f8;
+          font-family: Arial, Helvetica, sans-serif;
+        }
+        .container {
+          max-width: 600px;
+          margin: 30px auto;
+          background-color: #ffffff;
+          border-radius: 8px;
+          overflow: hidden;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .header {
+          background: linear-gradient(135deg, #2fa36b, #1f8f5f);
+          padding: 30px;
+          text-align: center;
+          color: #ffffff;
+        }
+        .logo {
+          width: 48px;
+          height: 48px;
+          border-radius: 8px;
+          background-color: #ffffff;
+          color: #2fa36b;
+          font-size: 28px;
+          font-weight: bold;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          margin-bottom: 10px;
+        }
+        .content {
+          padding: 30px;
+          color: #333333;
+          line-height: 1.6;
+        }
+        .content h2 {
+          margin-top: 0;
+          color: #222222;
+        }
+        .details-box {
+          margin: 25px 0;
+          border-left: 4px solid #2fa36b;
+          background-color: #f6fffb;
+          padding: 15px 20px;
+          border-radius: 4px;
+        }
+        .details-box p {
+          margin: 8px 0;
+          font-size: 14px;
+        }
+        .btn {
+          display: inline-block;
+          margin: 30px 0;
+          padding: 14px 28px;
+          background-color: #2fa36b;
+          color: #ffffff;
+          text-decoration: none;
+          border-radius: 6px;
+          font-weight: bold;
+          text-align: center;
+        }
+        .btn:hover {
+          background-color: #268a5a;
+        }
+        .footer {
+          padding: 20px 30px;
+          background-color: #fafafa;
+          font-size: 12px;
+          color: #777777;
+          text-align: center;
+        }
+        .footer a {
+          color: #2fa36b;
+          text-decoration: none;
+          margin: 0 6px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- Header -->
+    <div class="header">
+        <div class="logo">S</div>
+        <h1>supplyNest</h1>
+    </div>
+
+    <!-- Content -->
+    <div class="content">
+        <h2>Hello {{EMPLOYEE_NAME}},</h2>
+
+        <p>
+            You’ve been invited to join <strong>{{ORGANIZATION_NAME}}</strong> on
+            <strong>supplyNest</strong>. We’re excited to have you as part of our team.
+        </p>
+
+        <p>
+            <strong>{{INVITER_NAME}}</strong> ({{INVITER_EMAIL}}) has invited you to
+            collaborate and manage supplier operations together.
+        </p>
+
+        <!-- Invitation Details -->
+        <div class="details-box">
+            <p><strong>Organization:</strong> {{ORGANIZATION_NAME}}</p>
+            <p><strong>Your Email:</strong> {{EMPLOYEE_EMAIL}}</p>
+            <p><strong>Invited By:</strong> {{INVITER_NAME}}</p>
+        </div>
+
+        <!-- CTA -->
+        <div style="text-align:center;">
+            <a href="{{INVITE_LINK}}" class="btn">
+                Accept Invitation &amp; Create Account
+            </a>
+        </div>
+
+        <p style="font-size: 13px; color: #555;">
+            This invitation link will expire in <strong>{{EXPIRY_DAYS}}</strong> days.
+            Please do not share this link with anyone.
+        </p>
+
+        <p style="font-size: 13px;">
+            If you have any questions, contact us at
+            <a href="mailto:support@supplynest.com">support@supplynest.com</a>
+        </p>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p><strong>supplyNest</strong> – Streamlining Supplier Management</p>
+        <p>
+            © {{CURRENT_YEAR}} supplyNest. All rights reserved.
+        </p>
+        <p>
+            <a href="#">Help Center</a> |
+            <a href="#">Privacy Policy</a> |
+            <a href="#">Terms of Service</a>
+        </p>
+        <p>
+            This email was sent to {{EMPLOYEE_EMAIL}}
+        </p>
+    </div>
+
+</div>
+
+</body>
+</html>

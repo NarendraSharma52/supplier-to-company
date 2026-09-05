@@ -8,8 +8,13 @@ import com.supplify.supplier_to_company.exceptions.InvalidCredentialsException;
 import com.supplify.supplier_to_company.exceptions.UnAuthorizedException;
 import com.supplify.supplier_to_company.exceptions.UserNotFoundException;
 import com.supplify.supplier_to_company.models.Operation;
+import com.supplify.supplier_to_company.models.RefreshToken;
 import com.supplify.supplier_to_company.models.Role;
+import com.supplify.supplier_to_company.models.User;
+import com.supplify.supplier_to_company.security.JwtUtil;
 import com.supplify.supplier_to_company.services.AuthService;
+import com.supplify.supplier_to_company.services.RefreshTokenService;
+import com.supplify.supplier_to_company.services.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +30,15 @@ public class AuthController {
 
     @Autowired
     AuthService authService;
+
+    @Autowired
+    JwtUtil jwtUtil;
+
+    @Autowired
+    RefreshTokenService refreshTokenService;
+
+    @Autowired
+    RoleService roleService;
 
     @PostMapping("/login")
     public ResponseEntity loginUser(@RequestBody UserLoginDto userLoginDto){
@@ -86,7 +100,7 @@ public class AuthController {
 
 
     }
-    @PostMapping("/create-roel")
+    @PostMapping("/create-role")
     public ResponseEntity createRole(@RequestHeader String Authorization,
                                      @RequestBody CreateRoleDto createRoleDto){
 
@@ -106,6 +120,23 @@ public class AuthController {
         }
 
     }
+    @PostMapping("/refresh")
+    public ResponseEntity refreshToken(@RequestBody RefreshToken request){
+       RefreshToken refreshToken= refreshTokenService.Refreshtokenvalidty(request.getRefreshToken());
 
+        User user=refreshToken.getUser();
+        List<Role> roles=roleService.getRolesByIds(user.getId());
+        String token=jwtUtil.generateJwtToken(user.getEmail(),roles);
 
+        return token;
+
+    }
 }
+
+
+
+
+
+
+
+

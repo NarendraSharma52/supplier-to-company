@@ -21,7 +21,7 @@ public class MappingUtilities {
         supplier.setGstNumber(dto.getGstNumber());
         supplier.setPanNumber(dto.getPanNumber());
         supplier.setAddress(dto.getAddress());
-        supplier.setContactPersonName(dto.getContactPersonName());
+        supplier.setContactPersonName(dto.getContactPersonName()); 
         supplier.setContactEmail(dto.getContactEmail());
         supplier.setContactPhone(dto.getContactPhone());
         supplier.setCountry(dto.getCountry());
