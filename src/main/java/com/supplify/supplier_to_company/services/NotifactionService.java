@@ -25,7 +25,7 @@ public class NotifactionService {
     } 
 
     // ✅ Email sending method
-    public void inviteEmployeeEmail(SupplierUser invitee, User inviter) {
+    public void  inviteEmployeeEmail(SupplierUser invitee, User inviter) {
         try {
             Context context = new Context();
             context.setVariable("employeeName", invitee.getFirstName());

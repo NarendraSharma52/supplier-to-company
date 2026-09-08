@@ -2,8 +2,8 @@ package com.supplify.supplier_to_company.services;
 
 import com.supplify.supplier_to_company.models.Supplier;
 import com.supplify.supplier_to_company.models.SupplierUser;
-import com.supplify.supplier_to_company.models.User;
 import com.supplify.supplier_to_company.repositories.SupplierRepository;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -23,26 +23,26 @@ public class InvitationService {
         this.notifactionService = notifactionService;
     }
 
+    @Scheduled(cron = "0 0 10 * * *")
     public void sendPendingInvitations() {
 
         LocalDateTime twentyFourHoursAgo =
                 LocalDateTime.now().minusHours(24);
 
-        List<SupplierUser> supplierUsers  =
+        List<SupplierUser> supplierUsers =
                 supplierRepository.findByCreatedAtBefore(
                         twentyFourHoursAgo
                 );
 
-        for (SupplierUser supplier : SupplierUser) {
+        for (SupplierUser supplierUser : supplierUsers) {
 
+            Supplier invitee = supplierUser.getSupplier();
+            String inviter = supplierUser.getFirstName();
 
-            SupplierUser invitee =  supplier.getSupplier();
-            Supplier  inviter = supplier.getFirstName();
-
-            notifactionService.inviteEmployeeEmail(invitee, inviter);
-
-
-
+            notifactionService.inviteEmployeeEmail(
+                    invitee,
+                    inviter
+            );
         }
     }
 }

@@ -29,7 +29,7 @@ public class JwtUtil {
     @Autowired
     UserService userService;
 
-    public String generateJwtToken(String email,
+    public String   generateJwtToken(String email,
                                    List<String> roles){
         Map<String, Object> claims = new HashMap<>();
         claims.put("email", email);

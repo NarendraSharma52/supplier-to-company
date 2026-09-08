@@ -56,8 +56,8 @@ public class SupplierService {
     @Autowired
     PasswordGenratorUtility passwordGenratorUtility;
 
-    @Autowired
-    SupplierUserRepository supplierUserRepository;
+   @Autowired
+   SupplierU
 
     @Autowired
     UserRepository userRepository;

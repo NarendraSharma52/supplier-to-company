@@ -6,6 +6,7 @@ import com.supplify.supplier_to_company.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class RefreshTokenService {
@@ -34,7 +35,9 @@ public class RefreshTokenService {
         }
 
         else{
-            refreshToken1.setexpiryDte(Instant.now().plus(refreshToken1));
+            refreshToken1.setExpiryDate(
+                    LocalDateTime.now().plusDays(7)
+            );
         }
 
 
@@ -48,11 +51,9 @@ public class RefreshTokenService {
 
     public RefreshToken tokenverify(String refreshToken){
       RefreshToken refreshTokenOb=  refreshTokenRepository.findAllById(refreshToken);
-
-      if(refreshTokenOb.getexpirtDate().Instance.now()<0){
-          refreshTokenRepository.delete((refreshToken));
-          throw new RuntimeException("INvalid Exception");
-      }
+        if (refreshTokenObj.getExpiryDate().isBefore(LocalDateTime.now())) {
+            throw new RuntimeException("Refresh token expired");
+        }
       else{
           return RefreshToken
       }

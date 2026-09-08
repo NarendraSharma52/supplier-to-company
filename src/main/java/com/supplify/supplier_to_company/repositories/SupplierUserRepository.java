@@ -13,3 +13,4 @@ public interface SupplierUserRepository extends JpaRepository<SupplierUser, UUID
 
 public List<SupplierUser> findByCreatedDateAfter( LocalDateTime date);
 }
+public  List<SupplierUser> findByCreatedAtBefore(LocalDateTime time);
