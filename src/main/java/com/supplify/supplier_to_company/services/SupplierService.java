@@ -12,12 +12,12 @@ import com.supplify.supplier_to_company.utilities.PasswordGenratorUtility;
 import org.springframework.data.domain.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 
-import java.awt.print.Pageable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -40,6 +40,9 @@ public class SupplierService {
     SupplierUserService supplierUserService;
 
     @Autowired
+    SupplierUserRepository supplierUserRepository;
+
+    @Autowired
     NotifactionService notifactionService;
 
 
@@ -55,9 +58,6 @@ public class SupplierService {
 
     @Autowired
     PasswordGenratorUtility passwordGenratorUtility;
-
-   @Autowired
-   SupplierU
 
     @Autowired
     UserRepository userRepository;
@@ -204,10 +204,10 @@ public class SupplierService {
                 throw new IllegalArgumentException("Invalid unit. Use days/months/years");
         }
 
-        return supplierUserRepository.    findByCreatedDateAfter(date);
+        return supplierUserRepository.findByCreatedAtAfter(date);
     }
     public List<User> findUser(LocalDate start, LocalDate end){
-        return userRepository.findByCreatedDateBetween(start, end);
+        return userRepository.findByCreatedAtBetween(start, end);
     }
 
 
@@ -249,7 +249,7 @@ public class SupplierService {
         Supplier supplier=supplierRepository.findById(id).orElseThrow(()->new RuntimeException("User not found"));
 
         supplier.setName((null));
-        return supplierRepository.save(supplier);
+        supplierRepository.save(supplier);
     }
 
 

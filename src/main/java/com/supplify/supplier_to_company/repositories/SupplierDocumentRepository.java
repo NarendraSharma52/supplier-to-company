@@ -11,7 +11,7 @@ import java.util.UUID;
 public interface SupplierDocumentRepository extends JpaRepository<SupplierDocument, UUID> {
 
 
-    @Query(value = "select * from supplier_documents where supplier_id=: supplierId and document_type='companyLogo' ", nativeQuery = true)
+    @Query(value = "select * from supplier_documents where supplier_id = :supplierId and document_type = 'companyLogo' ", nativeQuery = true)
     public  SupplierDocument getSupplierCompanyLogo(UUID supplierId);
 
 }

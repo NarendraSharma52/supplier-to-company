@@ -69,7 +69,7 @@ public class AuthService {
         List<String> roleNames = roleService.mapRoleToRoleNames(user.getRoles());
         String token = jwtUtil.generateJwtToken(user.getEmail(), roleNames);
         RefreshToken refreshToken=refreshTokenService.create(user.getEmail());
-        authResponseDto.setRefreshtoken(user);
+        authResponseDto.setRefreshtoken(refreshToken.getToken());
 
         authResponseDto.setToken(token);
         if(user.getUserType().equals("SUPPLIER_USER")){

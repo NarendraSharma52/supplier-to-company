@@ -35,10 +35,10 @@ public class JwtUtil {
         claims.put("email", email);
         claims.put("roles", roles);
         String jwtToken = Jwts.builder()
-                .setExpiration(new Date(System.currentTimeMillis() + expirationTime))
+                .setClaims(claims)                          // set custom claims FIRST — setClaims replaces the whole map
                 .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + expirationTime))
                 .signWith(SignatureAlgorithm.HS256, secretPassword)
-                .setClaims(claims)
                 .compact();
         return jwtToken;
     }

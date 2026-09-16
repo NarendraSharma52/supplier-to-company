@@ -1,8 +1,9 @@
-package com.supplify.supplier_to_company.services;
+package com.supplify.supplier_to_company.scheduler;
 
 import com.supplify.supplier_to_company.models.Supplier;
 import com.supplify.supplier_to_company.models.SupplierUser;
-import com.supplify.supplier_to_company.repositories.SupplierRepository;
+import com.supplify.supplier_to_company.repositories.SupplierUserRepository;
+import com.supplify.supplier_to_company.services.NotifactionService;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -10,16 +11,16 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
-public class InvitationService {
+public class SupplierScheduler {
 
-    private final SupplierRepository supplierRepository;
+    private final SupplierUserRepository supplierUserRepository;
     private final NotifactionService notifactionService;
 
-    public InvitationService(
-            SupplierRepository supplierRepository,
+    public SupplierScheduler(
+            SupplierUserRepository supplierUserRepository,
             NotifactionService notifactionService) {
 
-        this.supplierRepository = supplierRepository;
+        this.supplierUserRepository = supplierUserRepository;
         this.notifactionService = notifactionService;
     }
 
@@ -30,18 +31,16 @@ public class InvitationService {
                 LocalDateTime.now().minusHours(24);
 
         List<SupplierUser> supplierUsers =
-                supplierRepository.findByCreatedAtBefore(
+                supplierUserRepository.findByCreatedAtBefore(
                         twentyFourHoursAgo
                 );
 
         for (SupplierUser supplierUser : supplierUsers) {
 
-            Supplier invitee = supplierUser.getSupplier();
-            String inviter = supplierUser.getFirstName();
-
+            // Re-send the pending invitation email to this supplier user.
             notifactionService.inviteEmployeeEmail(
-                    invitee,
-                    inviter
+                    supplierUser,
+                    supplierUser
             );
         }
     }

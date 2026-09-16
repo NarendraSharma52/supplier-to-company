@@ -122,13 +122,13 @@ public class AuthController {
     }
     @PostMapping("/refresh")
     public ResponseEntity refreshToken(@RequestBody RefreshToken request){
-       RefreshToken refreshToken= refreshTokenService.Refreshtokenvalidty(request.getRefreshToken());
+        RefreshToken refreshToken = refreshTokenService.tokenVerify(request.getToken());
 
-        User user=refreshToken.getUser();
-        List<Role> roles=roleService.getRolesByIds(user.getId());
-        String token=jwtUtil.generateJwtToken(user.getEmail(),roles);
+        User user = refreshToken.getUser();
+        List<String> roleNames = roleService.mapRoleToRoleNames(user.getRoles());
+        String token = jwtUtil.generateJwtToken(user.getEmail(), roleNames);
 
-        return token;
+        return ResponseEntity.ok(token);
 
     }
 }

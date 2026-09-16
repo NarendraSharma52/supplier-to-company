@@ -11,6 +11,7 @@ import com.supplify.supplier_to_company.models.SupplierUser;
 
 public interface SupplierUserRepository extends JpaRepository<SupplierUser, UUID> {
 
-public List<SupplierUser> findByCreatedDateAfter( LocalDateTime date);
+    public List<SupplierUser> findByCreatedAtAfter(LocalDateTime date);
+
+    public List<SupplierUser> findByCreatedAtBefore(LocalDateTime time);
 }
-public  List<SupplierUser> findByCreatedAtBefore(LocalDateTime time);

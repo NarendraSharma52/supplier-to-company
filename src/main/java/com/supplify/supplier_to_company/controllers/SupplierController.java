@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -101,7 +102,9 @@ public class SupplierController {
         }
 
         // Your invitation business logic
-        supplierService.inviteSupplierEmployee(inviteSupplierEmployeeDto, authorization);
+        supplierService.inviteSupplierEmployee(
+                inviteSupplierEmployeeDto,
+                authService.getUserByToken(authorization));
 
         return ResponseEntity.ok("Employee invitation sent successfully");
     }
@@ -120,9 +123,9 @@ public class SupplierController {
     public ResponseEntity getSupplierBtwDDates(@RequestParam String startDate,
                                                @RequestParam String endDate){
         try{
-            LocalDateTime start=LocalDateTime.parse(startDate);
-            LocalDateTime end=LocalDateTime.parse(endDate);
-            return ResponseEntity.ok(supplierService.getUserByDate(start,end));
+            LocalDate start=LocalDate.parse(startDate);
+            LocalDate end=LocalDate.parse(endDate);
+            return ResponseEntity.ok(supplierService.findUser(start,end));
 
         } catch (RuntimeException e) {
             throw new RuntimeException(e);
@@ -148,7 +151,7 @@ public class SupplierController {
 
     @DeleteMapping("/deletename/{id}")
     public String deleteName(UUID id){
-        return  supplierService.deleteName(id);
+        supplierService.deleteName(id);
         return "User name succesfully";
     }
 
